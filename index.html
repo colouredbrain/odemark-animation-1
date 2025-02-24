@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="en"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;My Animation&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"&gt;&lt;/script&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body style="margin:0; overflow:hidden;"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.addEventListener("DOMContentLoaded", function () {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const scene = new THREE.Scene();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const renderer = new THREE.WebGLRenderer();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>renderer.setSize(window.innerWidth, window.innerHeight);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.body.appendChild(renderer.domElement);</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const geometry = new THREE.PlaneGeometry(2, 2);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>const material = new THREE.ShaderMaterial({</p>
+<p class="p1"><span class="Apple-converted-space">                </span>uniforms: {</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>u_time: { value: 0.0 },</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }</p>
+<p class="p1"><span class="Apple-converted-space">                </span>},</p>
+<p class="p1"><span class="Apple-converted-space">                </span>vertexShader: `</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>void main() {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>`,</p>
+<p class="p1"><span class="Apple-converted-space">                </span>fragmentShader: `</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>#ifdef GL_ES</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>precision mediump float;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>#endif</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>uniform vec2 u_resolution;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>uniform float u_time;</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>void main() {</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>vec2 p = gl_FragCoord.xy / u_resolution.xy;</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>float color = 0.5 + 0.5 * sin(u_time + p.x * 10.0);</p>
+<p class="p1"><span class="Apple-converted-space">                        </span>gl_FragColor = vec4(color, color, color, 1.0);</p>
+<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
+<p class="p1"><span class="Apple-converted-space">                </span>`</p>
+<p class="p1"><span class="Apple-converted-space">            </span>});</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>const plane = new THREE.Mesh(geometry, material);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>scene.add(plane);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>camera.position.z = 1;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>function animate() {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>requestAnimationFrame(animate);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>material.uniforms.u_time.value += 0.05;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>renderer.render(scene, camera);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>animate();</p>
+<p class="p1"><span class="Apple-converted-space">        </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
